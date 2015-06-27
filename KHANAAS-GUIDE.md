@@ -21,6 +21,10 @@ DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', '
 - Make sure application can connect to database
 `vagrant ssh -c './khanaas/manage.py dbshell'`
 
+#### Postgres 101
+- To see the databases that exist `\list`
+- To see the relations that exist `\dt`
+- The rest is default sql. 
 
 ### Create simple API views
  - create urls for khan/$name and spock/$name, view/template that display $name on the page
