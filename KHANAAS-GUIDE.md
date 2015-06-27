@@ -14,10 +14,12 @@
 ### Configure Database Settings
 - Create local_settings.py file under `./khanaas/khanaas/` folder. 
 - Place database setting in `./khanaas/khanaas/local_settings.py` file
-
 ```
 DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'khanaas', 'USER': 'postgres', 'PASSWORD': '', } }
 ```
+- Insert following in settings.py at EOF to import local_settings
+`from khanaas.local_settings import *`
+
 - Make sure application can connect to database
 `vagrant ssh -c './khanaas/manage.py dbshell'`
 
