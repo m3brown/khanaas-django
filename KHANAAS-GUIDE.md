@@ -15,7 +15,11 @@
 - Create local_settings.py file under `./khanaas/khanaas/` folder. 
 - Place database setting in `./khanaas/khanaas/local_settings.py` file
 
-```DATABASES = {'default': {'ENGINE': 'django.contrib.gis.db.backends.postgis', 'NAME': 'khanaas', 'USER': 'svc_khanaas', 'PASSWORD': 'khanaas', 'HOST': 'localhost', 'PORT': '5432'}}```
+```
+DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'khanaas', 'USER': 'postgres', 'PASSWORD': '', } }
+```
+- Make sure application can connect to database
+`vagrant ssh -c './khanaas/manage.py dbshell'`
 
 
 ### Create simple API views
