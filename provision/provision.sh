@@ -29,8 +29,8 @@ if ! command -v psql; then
 fi
 
 # bash environment global setup
-echo "export WORKON_HOME=/home/vagrant/.virtualenvs" >> /home/vagrant/.bashrc
-echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bashrc
+echo "export WORKON_HOME=/home/vagrant/.virtualenvs" >> /home/vagrant/.bash_profile
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bash_profile
 
 # ---
 
@@ -42,4 +42,4 @@ su - vagrant -c "/usr/bin/virtualenv $VIRTUALENV_DIR && \
     echo $PROJECT_DIR > $VIRTUALENV_DIR/.project && \
     $VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements.txt"
 
-echo "workon $PROJECT_NAME" >> /home/vagrant/.bashrc
+echo "workon $PROJECT_NAME" >> /home/vagrant/.bash_profile
