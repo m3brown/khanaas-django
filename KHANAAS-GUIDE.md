@@ -1,6 +1,7 @@
 # Guide for implementing Khan AAS
 
 ### Create a Django Project
+- Create a project directory `mkdir khanaas`
  - `vagrant ssh -c 'django-admin startproject khanaas ./khanaas'`
    - creates a new django environment in your shared directory
    - show that the changes are available from the host environment (mac, windows)
