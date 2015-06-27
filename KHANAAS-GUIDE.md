@@ -11,6 +11,11 @@
  - `vagrant ssh -c './khanaas/manage.py runserver 0.0.0.0:8000'`
  - The server should be running at localhost:8000
 
+### Configure Database Settings
+- Place database setting in ./khanaas/khanaas/settings.py
+`DATABASES = {'default': {'ENGINE': 'django.contrib.gis.db.backends.postgis', 'NAME': 'khanaas', 'USER': 'svc_khanaas', 'PASSWORD': 'khanaas', 'HOST': 'localhost', 'PORT': '5432'}}`
+
+
 ### Create simple API views
  - create urls for khan/$name and spock/$name, view/template that display $name on the page
 
