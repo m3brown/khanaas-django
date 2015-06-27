@@ -8,7 +8,7 @@
  - Create some minimal view/template/url that we can demo with runtestserver
 
 ### Demo runtestserver
- - `vagrant ssh -c './manage.py runtestserver'`
+ - `vagrant ssh -c './khanaas/manage.py runtestserver'`
  - localhost:8000
 
 ### Create simple API views
