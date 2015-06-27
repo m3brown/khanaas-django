@@ -41,4 +41,4 @@ DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', '
 
 ### IDEA create a model for the API pages (i.e. khan and spock) so we can log hit counts or something
  - Create a view/template for displaying the metrics of all endpoints (i.e. a table of person and visit count, etc.)
-
+ - Which character do people like the most? (Spock vs. Khanaas vs. Kirk)
