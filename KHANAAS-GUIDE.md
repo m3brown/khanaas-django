@@ -13,7 +13,8 @@
 
 ### Configure Database Settings
 - Place database setting in ./khanaas/khanaas/settings.py
-`DATABASES = {'default': {'ENGINE': 'django.contrib.gis.db.backends.postgis', 'NAME': 'khanaas', 'USER': 'svc_khanaas', 'PASSWORD': 'khanaas', 'HOST': 'localhost', 'PORT': '5432'}}`
+
+```DATABASES = {'default': {'ENGINE': 'django.contrib.gis.db.backends.postgis', 'NAME': 'khanaas', 'USER': 'svc_khanaas', 'PASSWORD': 'khanaas', 'HOST': 'localhost', 'PORT': '5432'}}```
 
 
 ### Create simple API views
