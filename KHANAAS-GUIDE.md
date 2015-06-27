@@ -12,7 +12,8 @@
  - The server should be running at localhost:8000
 
 ### Configure Database Settings
-- Place database setting in ./khanaas/khanaas/settings.py
+- Create local_settings.py file under `./khanaas/khanaas/` folder. 
+- Place database setting in `./khanaas/khanaas/local_settings.py` file
 
 ```DATABASES = {'default': {'ENGINE': 'django.contrib.gis.db.backends.postgis', 'NAME': 'khanaas', 'USER': 'svc_khanaas', 'PASSWORD': 'khanaas', 'HOST': 'localhost', 'PORT': '5432'}}```
 
