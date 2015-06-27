@@ -14,3 +14,7 @@ Thumbs.db
 # Python #
 #################
 *.pyc
+
+# Vagrant #
+#################
+.vagrant
