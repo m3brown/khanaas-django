@@ -1,7 +1,7 @@
 # Guide for implementing Khan AAS
 
 ### Create a Django Project
- - `vagrant ssh -c 'django-admin startproject khanaas .'`
+ - `vagrant ssh -c 'django-admin startproject khanaas ./khanaas'`
    - creates a new django environment in your shared directory
    - show that the changes are available from the host environment (mac, windows)
  - settings.py options (psql, maybe more?)
