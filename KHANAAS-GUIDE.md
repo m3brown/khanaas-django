@@ -30,7 +30,7 @@ DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', '
 - The rest is default sql. 
 
 ### Create API App
- - `vagrant ssh -c './khanaas/manage.py startapp api`
+ - `vagrant ssh -c './khanaas/manage.py startapp api'`
 
 #### Create simple API views
  - create urls for khan/$name and spock/$name, view/template that display $name on the page
