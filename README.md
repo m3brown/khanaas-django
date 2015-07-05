@@ -10,8 +10,9 @@
     Installation instructions can be found here: http://docs.vagrantup.com/v2/installation/
 
 ## Installation
-
-Run `vagrant up` to create and provision the virtual machine
+1. Follow instructions [here](http://www.vagrantup.com/downloads) to install vagrant.  
+2. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
+3. Run `vagrant up` to create and provision the virtual machine
 
 ### Command Line Access
 Once provisioning completes, connect to the machine using `vagrant ssh`
