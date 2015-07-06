@@ -7,12 +7,13 @@
 
 ## Dependencies
 - **Vagrant / Virtualbox** - creates the VM used for development
-    Installation instructions can be found here: http://docs.vagrantup.com/v2/installation/
+  - Vagrant download links can be found [here](http://www.vagrantup.com/downloads)
+  - Virtualbox download links can be found [here](https://www.virtualbox.org/wiki/Downloads)
 
 ## Installation
-1. Follow instructions [here](http://www.vagrantup.com/downloads) to install vagrant.  
-2. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
-3. Run `vagrant up` to create and provision the virtual machine
+1. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
+1. Run `vagrant up` to create and provision the virtual machine
+1. Follow the [guide](KHANAAS-GUIDE.md) for creating your own Khan AAS app
 
 ### Command Line Access
 Once provisioning completes, connect to the machine using `vagrant ssh`

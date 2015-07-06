@@ -34,8 +34,9 @@ echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bash_profile
 
 # ---
 
-# postgresql setup for project
-createdb -Upostgres $PROJECT_NAME
+# Create postgresql user and database
+su -l postgres -c 'createuser --no-password -s -e khan'
+createdb -Ukhan $PROJECT_NAME
 
 # virtualenv setup for project
 su - vagrant -c "/usr/bin/virtualenv $VIRTUALENV_DIR && \
