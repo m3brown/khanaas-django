@@ -62,20 +62,20 @@ vagrant ssh -c './manage.py createsuperuser'
        ```
  - Create a 'hello world' view by adding the following to `api/views.py`:
 
-     ```python
-     from django.http import HttpResponse # Put this at the top of the file
-     def hello_world_view(request):
-        return HttpResponse("Hello, world, this is khan aas")
-     ```
+    ```python
+    from django.http import HttpResponse # Put this at the top of the file
+    def hello_world_view(request):
+       return HttpResponse("Hello, world, this is khan aas")
+    ```
  - Create a url path to the new view by creating `api/urls.py` with the following content:
 
-     ```python
-     from django.conf.urls import patterns, url
+    ```python
+    from django.conf.urls import patterns, url
 
-     urlpatterns = patterns('api.views',
-                            url(r'^hello$', 'hello_world_view'),
-                           )
-     ```
+    urlpatterns = patterns('api.views',
+                           url(r'^hello$', 'hello_world_view'),
+                          )
+    ```
  - View the page at http://localhost:8000/hello
 
 #### Create simple API views
