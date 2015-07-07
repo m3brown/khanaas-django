@@ -104,7 +104,7 @@ vagrant ssh -c './manage.py createsuperuser'
           context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',   #context contains the variables  
                       'phrase': phrase + (last_char * 5)                     #required by the template in {{ }}
                     }
-          return render(request, 'kirk.html', context)
+          return render(request, 'api/kirk.html', context)
       ```
 
    - Add the following url path to `api/urls.py` under urlpatterns
