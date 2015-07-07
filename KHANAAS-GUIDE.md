@@ -100,11 +100,11 @@ vagrant ssh -c './manage.py createsuperuser'
 
       ```python
       def kirk_view(request, phrase):
-      last_char = phrase[-1]
-      context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',   #context contains the variables  
-                  'phrase': phrase + (last_char * 5)                     #required by the template in {{ }}
-                }
-      return render(request, 'kirk.html', context)
+          last_char = phrase[-1]
+          context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',   #context contains the variables  
+                      'phrase': phrase + (last_char * 5)                     #required by the template in {{ }}
+                    }
+          return render(request, 'kirk.html', context)
       ```
 
    - Add the following url path to `api/urls.py` under urlpatterns
