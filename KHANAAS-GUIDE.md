@@ -79,7 +79,7 @@ vagrant ssh -c './manage.py createsuperuser'
  - View the page at http://localhost:8000/hello
 
 #### Create simple API views
- - Create a html template, view and url that display $name on the page
+ - Create a html template, view and url that display a phrase on the page
    - Create a html template by creating `api/templates/kirk.html` and add the following code:
 
       ```
