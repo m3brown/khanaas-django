@@ -82,44 +82,44 @@ vagrant ssh -c './manage.py createsuperuser'
 Create an html template, view and url that display a phrase on the page
  - Create an html template by creating `api/templates/api/khanaas_template.html` and add the following code:
 
-      ```html
-      <html>
-        <head>
-          <title>Khan As A Service (KHANAAS)</title>
-          <meta charset="utf-8">
-          <style> span#message { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; padding-left: .2em; font-weight: bold; color: white; font-size: 10em; display: inline-block; white-space: nowrap; } </style>
-        </head>
-        <body background="{{ img_url }}" style="background-size: 100%; margin-top:40px;">
-          <span id="message">{{ phrase }} </span>
-        </body>
-      </html>
-      ```
-     * NOTE: Django combines the templates directories from all apps into one namespace.  As a result, it's considered good practice to create an `<appname>` directory inside your templates directory to ensure there is not a naming conflict with templates in another Django app.
+    ```html
+    <html>
+      <head>
+        <title>Khan As A Service (KHANAAS)</title>
+        <meta charset="utf-8">
+        <style> span#message { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; padding-left: .2em; font-weight: bold; color: white; font-size: 10em; display: inline-block; white-space: nowrap; } </style>
+      </head>
+      <body background="{{ img_url }}" style="background-size: 100%; margin-top:40px;">
+        <span id="message">{{ phrase }} </span>
+      </body>
+    </html>
+    ```
+    * NOTE: Django combines the templates directories from all apps into one namespace.  As a result, it's considered good practice to create an `<appname>` directory inside your templates directory to ensure there is not a naming conflict with templates in another Django app.
            
  - Add the following code to `api/views.py` to render the template in the previous step:
 
-      ```python
-      def kirk_view(request, input_phrase):
-          last_char = input_phrase[-1]
-          # The context defines the variables used in the template. Our template
-          # expects 'img_url' and 'phrase' variables to be provided.
-          context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',
-                      'phrase': input_phrase + (last_char * 5)
-                    }
+    ```python
+    def kirk_view(request, input_phrase):
+        last_char = input_phrase[-1]
+        # The context defines the variables used in the template. Our template
+        # expects 'img_url' and 'phrase' variables to be provided.
+        context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',
+                    'phrase': input_phrase + (last_char * 5)
+                  }
 
-          # render() creates an HTTP Response using the template (2nd argument) and the
-          # context (3rd argument) providing variables for the template
-          return render(request, 'api/khanaas_template.html', context)
-      ```
+        # render() creates an HTTP Response using the template (2nd argument) and the
+        # context (3rd argument) providing variables for the template
+        return render(request, 'api/khanaas_template.html', context)
+    ```
 
  - Add the following url path to the urlpatterns in `api/urls.py`:
      
-      ```
-      url(r'^kirk/(?P<input_phrase>[\w]+)$', 'kirk_view'),
-      ```
-      - kirk_view is the name of the function to call in views.py
-      - <input_phrase> is the name of the parameter passed to the kirk_view function
-      - [\w]+ is regex for input_phrase, requiring that the value be one or more 'word' (i.e. alphanumeric) characters
+    ```
+    url(r'^kirk/(?P<input_phrase>[\w]+)$', 'kirk_view'),
+    ```
+    - kirk_view is the name of the function to call in views.py
+    - <input_phrase> is the name of the parameter passed to the kirk_view function
+    - [\w]+ is regex for input_phrase, requiring that the value be one or more 'word' (i.e. alphanumeric) characters
 
  - Congratulations, you've implemented KhanAAS! Try out the api endpoint with your name: http://localhost:8000/kirk/<yournamehere>
 
