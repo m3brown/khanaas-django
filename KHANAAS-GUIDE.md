@@ -79,7 +79,41 @@ vagrant ssh -c './manage.py createsuperuser'
  - View the page at http://localhost:8000/hello
 
 #### Create simple API views
- - create urls for khan/$name and spock/$name, view/template that display $name on the page
+ - Create a html template, view and url that display a phrase on the page
+   - Create a html template by creating `api/templates/kirk.html` and add the following code:
+
+      ```
+      <html>
+        <head>
+          <title>Khan As A Service (KHANAAS)</title>
+          <meta charset="utf-8">
+          <style> span#message { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; padding-left: .2em; font-weight: bold; color: white; font-size: 10em; display: inline-block; white-space: nowrap; } </style>
+        </head>
+        <body background="{{ img_url }}" style="background-size: 100%; margin-top:40px;">
+          <span id="message">{{ phrase }} </span>
+        </body>
+      </html>
+      ```
+     * NOTE: We cannot put this template directly into the `api/templates/` directory because of how the template loader            does namespacing. Django will choose the first template it finds whose name matches, and if you had a template               with the same name in a different application, Django would be unable to distinguish between them.
+           
+   - Add the following code to `api/views.py` to render the template with a name:
+
+      ```python
+      def kirk_view(request, phrase):
+          last_char = phrase[-1]
+          context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',   #context contains the variables  
+                      'phrase': phrase + (last_char * 5)                     #required by the template in {{ }}
+                    }
+          return render(request, 'api/kirk.html', context)
+      ```
+
+   - Add the following url path to `api/urls.py` under urlpatterns
+     
+      ```
+      url(r'^kirk/(?P<phrase>[\w]+)$', 'kirk_view'),
+      ```
+
+   - Follow the above instructions to create a view for the spock image located  at `http://www.khanaas.com/images/spock.jpg`
 
 ### Walk through process for adding an image for the background (khan and spock)
 
