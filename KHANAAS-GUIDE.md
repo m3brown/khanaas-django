@@ -126,3 +126,53 @@ vagrant ssh -c './manage.py createsuperuser'
 ### IDEA create a model for the API pages (i.e. khan and spock) so we can log hit counts or something
  - Create a view/template for displaying the metrics of all endpoints (i.e. a table of person and visit count, etc.)
  - Which character do people like the most? (Spock vs. Khanaas vs. Kirk)
+
+- Create a database table for each of the background photos we want to provide
+  - Add the following to `api/models.py`:
+      ```python
+      class Character(models.Model):
+      name = models.CharField(max_length=50)
+      hits = models.IntegerField(default=0, editable=False)
+      img_url = models.CharField(max_length=100)
+
+      def __unicode__(self):
+          return self.name
+      ```
+  - Create a definition for the database changes, called a '[migration](https://docs.djangoproject.com/en/1.8/topics/migrations/)':
+
+      ```shell
+      vagrant ssh -c './manage.py makemigrations api'
+      ```
+  - Apply the migration on the database:
+
+      ```shell
+      vagrant ssh -c './manage.py migrate'
+      ```
+  - Add the following code to 'api/admin.py' to activate our Character model in the Django admin console:
+
+      ```python
+      admin.site.register(Character)
+      ```
+  - Note that 'Character' is now an option in your admin console: http://localhost:8000/admin
+    - Create a 'kirk' character, and set the 'img_url' to 'http://khanaas.com/images/kirk.jpg'
+- Now that we have a Kirk character to reference in our database, let's restructure our function in 'api/views.py':
+    ```python
+    def get_character_view(request, input_character, input_phrase):
+    # Get the character by name, if it exists (case insensitive)
+    character_obj = get_object_or_404(Character, name__iexact=input_character)
+
+    last_char = input_phrase[-1]
+    context = {
+        # Tweak the input phrase by repeating the last character
+        'phrase' : input_phrase + (last_char * 5),
+        'img_url': character_obj.img_url
+    }
+    return render(request, 'khanaas.html', context)
+     ```
+- Lastly, let's adjust the URL path in 'api/urls.py' to take a variable input for the character name:
+
+    ```python
+    url(r'^(?P<input_character>[\w]+)/(?P<input_phrase>[\w]+)$', 'get_character_view'),
+    ```
+- The kirk URL should work the same as it did before, test it out: http://localhost:8000/kirk/test
+- Once you get kirk working, using the Django admin console to add a page for Spock: http://khanaas.com/images/spock.jpg
