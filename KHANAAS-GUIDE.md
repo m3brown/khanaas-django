@@ -94,13 +94,15 @@ vagrant ssh -c './manage.py createsuperuser'
         </body>
       </html>
       ```
+           *NOTE: We cannot put this template directly into the `api/templates/` directory because of how the template loader            does namespacing. Django will choose the first template it finds whose name matches, and if you had a template               with the same name in a different application, Django would be unable to distinguish between them.
+           
    - Add the following code to `api/views.py` to render the template with a name:
 
       ```python
       def kirk_view(request, phrase):
       last_char = phrase[-1]
       context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg', 
-                  'name': phrase + (last_char * 5) 
+                  'phrase': phrase + (last_char * 5) 
                 }
       return render(request, 'kirk.html', context)
       ```
