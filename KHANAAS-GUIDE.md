@@ -1,36 +1,82 @@
 # Guide for implementing Khan AAS
 
+### Initialize the virtual machine
+ - clone this repo
+ - run `vagrant up`
+
 ### Create a Django Project
- - Create a project directory `mkdir khanaas`
- - `vagrant ssh -c 'django-admin startproject khanaas ./khanaas'`
+ - Create a Django project.  The root of this repository will be our Django project root.
+ - `vagrant ssh -c 'django-admin startproject khanaas .'`
    - creates a new django environment in your shared directory
    - show that the changes are available from the host environment (mac, windows)
- - settings.py options (psql, maybe more?)
- - Create some minimal view/template/url that we can demo with runtestserver
+
+### Configure the Django App
+- Create `./khanaas/local_settings.py` and paste the following database settings: 
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'khanaas',
+        'USER': 'khan',
+        'PASSWORD': '', # no password needed for dev
+    }
+}
+```
+- Place the following at the bottom of khanaas/settings.py
+```python
+from khanaas.local_settings import *
+```
+- Initialize the Django database tables
+```shell
+vagrant ssh -c './manage.py migrate'
+```
+- Create a superuser account for yourself
+```shell
+# You will be prompted for a username, email, and password
+vagrant ssh -c './manage.py createsuperuser'
+```
+- Check out the database via postgresql shell
+  - Activate the shell with `vagrant ssh -c './manage.py dbshell'`
+    - `manage.py dbshell` is effectively shorthand for `psql -U khan -d khanaas`
+  - Show a list of the tables in the database: `\dt`
+  - Show the list of users in the database: `select * from auth_user;`
+  - Type 'Control-D' to exit the postgresql shell
 
 ### Demo runtestserver
- - `vagrant ssh -c './khanaas/manage.py runserver 0.0.0.0:8000'`
- - The server should be running at localhost:8000
+ - Open up a new terminal window and run `vagrant ssh -c './manage.py runserver 0.0.0.0:8000'`
+   - Leave this running in the background for the remainder of the project
+ - You can test the app on your local computer by visiting http://localhost:8000
+ - You can view the admin interface by visiting http://localhost:8000/admin
+   - Notice you can view **and edit** records in the database
+   - Try adding your first and last name to your user account: http://localhost:8000/admin/auth/user/1
+     - Note: The save button is annoying in the bottom right corner of the page.
 
-### Configure Database Settings
-- Create local_settings.py file under `./khanaas/khanaas/` folder. 
-- Place database setting in `./khanaas/khanaas/local_settings.py` file
-```
-DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'khanaas', 'USER': 'postgres', 'PASSWORD': '', } }
-```
-- Insert following in settings.py at EOF to import local_settings
-`from khanaas.local_settings import *`
+### Create an API App
+ - Create a new django app called 'api': `vagrant ssh -c './manage.py startapp api'`
+ - Enable the api app by adjusting a couple files:
+   - Add `'api'` to the INSTALLED_APPS array in `khanaas/settings.py`:
+   - Forward requests to the api by adding the following to the urlpatterns array in `khanaas/urls.py`:
 
-- Make sure application can connect to database
-`vagrant ssh -c './khanaas/manage.py dbshell'`
+       ```python
+       url(r'^', include('api.urls', namespace='api')),
+       ```
+ - Create a 'hello world' view by adding the following to `api/views.py`:
 
-#### Postgres 101
-- To see the databases that exist `\list`
-- To see the relations that exist `\dt`
-- The rest is default sql. 
+    ```python
+    from django.http import HttpResponse # Put this at the top of the file
+    def hello_world_view(request):
+       return HttpResponse("Hello, world, this is khan aas")
+    ```
+ - Create a url path to the new view by creating `api/urls.py` with the following content:
 
-### Create API App
- - `vagrant ssh -c 'cd ./khanaas/ && python manage.py startapp api'`
+    ```python
+    from django.conf.urls import patterns, url
+
+    urlpatterns = patterns('api.views',
+                           url(r'^hello$', 'hello_world_view'),
+                          )
+    ```
+ - View the page at http://localhost:8000/hello
 
 #### Create simple API views
  - create urls for khan/$name and spock/$name, view/template that display $name on the page
