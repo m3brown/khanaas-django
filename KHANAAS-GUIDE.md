@@ -78,8 +78,8 @@ vagrant ssh -c './manage.py createsuperuser'
     ```
  - View the page at http://localhost:8000/hello
 
-#### Create simple API views
- - Create view and template that display $name on the page
+#### Create a simple API view for Kirk
+ - Create a html template, view and url that display $name on the page
    - Create a html template by creating `api/templates/kirk.html` and add the following code:
 
       ```
@@ -104,13 +104,14 @@ vagrant ssh -c './manage.py createsuperuser'
                 }
       return render(request, 'kirk.html', context)
       ```
-  - Add the following url path to `api/urls.py` under urlpatterns
+
+   - Add the following url path to `api/urls.py` under urlpatterns
      
       ```
       url(r'^kirk/(?P<phrase>[\w]+)$', 'kirk_view'),
       ```
 
- - create urls for khan/$name and spock/$name, 
+   - Follow the above instructions to create a view for the spock image located  at `http://www.khanaas.com/images/spock.jpg`
 
 ### Walk through process for adding an image for the background (khan and spock)
 
