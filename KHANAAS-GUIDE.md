@@ -79,50 +79,110 @@ vagrant ssh -c './manage.py createsuperuser'
  - View the page at http://localhost:8000/hello
 
 #### Create simple API views
- - Create a html template, view and url that display a phrase on the page
-   - Create a html template by creating `api/templates/kirk.html` and add the following code:
+Create an html template, view and url that display a phrase on the page
+ - Create an html template by creating `api/templates/api/khanaas_template.html` and add the following code:
 
-      ```
-      <html>
-        <head>
-          <title>Khan As A Service (KHANAAS)</title>
-          <meta charset="utf-8">
-          <style> span#message { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; padding-left: .2em; font-weight: bold; color: white; font-size: 10em; display: inline-block; white-space: nowrap; } </style>
-        </head>
-        <body background="{{ img_url }}" style="background-size: 100%; margin-top:40px;">
-          <span id="message">{{ phrase }} </span>
-        </body>
-      </html>
-      ```
-     * NOTE: We cannot put this template directly into the `api/templates/` directory because of how the template loader            does namespacing. Django will choose the first template it finds whose name matches, and if you had a template               with the same name in a different application, Django would be unable to distinguish between them.
+    ```html
+    <html>
+      <head>
+        <title>Khan As A Service (KHANAAS)</title>
+        <meta charset="utf-8">
+        <style> span#message { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; padding-left: .2em; font-weight: bold; color: white; font-size: 10em; display: inline-block; white-space: nowrap; } </style>
+      </head>
+      <body background="{{ img_url }}" style="background-size: 100%; margin-top:40px;">
+        <span id="message">{{ phrase }} </span>
+      </body>
+    </html>
+    ```
+    * NOTE: Django combines the templates directories from all apps into one namespace.  As a result, it's considered good practice to create an `<appname>` directory inside your templates directory to ensure there is not a naming conflict with templates in another Django app.
            
-   - Add the following code to `api/views.py` to render the template with a name:
+ - Add the following code to `api/views.py` to render the template in the previous step:
 
-      ```python
-      def kirk_view(request, phrase):
-          last_char = phrase[-1]
-          context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',   #context contains the variables  
-                      'phrase': phrase + (last_char * 5)                     #required by the template in {{ }}
-                    }
-          return render(request, 'api/kirk.html', context)
-      ```
+    ```python
+    def kirk_view(request, input_phrase):
+        last_char = input_phrase[-1]
+        # The context defines the variables used in the template. Our template
+        # expects 'img_url' and 'phrase' variables to be provided.
+        context = { 'img_url': 'http://www.khanaas.com/images/kirk.jpg',
+                    'phrase': input_phrase + (last_char * 5)
+                  }
 
-   - Add the following url path to `api/urls.py` under urlpatterns
+        # render() creates an HTTP Response using the template (2nd argument) and the
+        # context (3rd argument) providing variables for the template
+        return render(request, 'api/khanaas_template.html', context)
+    ```
+
+ - Add the following url path to the urlpatterns in `api/urls.py`:
      
-      ```
-      url(r'^kirk/(?P<phrase>[\w]+)$', 'kirk_view'),
-      ```
+    ```
+    url(r'^kirk/(?P<input_phrase>[\w]+)$', 'kirk_view'),
+    ```
+    - kirk_view is the name of the function to call in views.py
+    - <input_phrase> is the name of the parameter passed to the kirk_view function
+    - [\w]+ is regex for input_phrase, requiring that the value be one or more 'word' (i.e. alphanumeric) characters
 
-   - Follow the above instructions to create a view for the spock image located  at `http://www.khanaas.com/images/spock.jpg`
-
-### Walk through process for adding an image for the background (khan and spock)
-
-### Walk through the process of styling the input text
- - Probably should just do inline CSS in the template for simplicity, unless you think there is value is demoing the static file functionality (which is a decent argument)
+ - Congratulations, you've implemented KhanAAS! Try out the api endpoint with your name: http://localhost:8000/kirk/<yournamehere>
 
 ### IDEA investigate if we can have some customizable django admin field for modifying the input text
  - i.e. mike -> mikeeee or miiikkkeee based on some regex in a django-admin text field
 
-### IDEA create a model for the API pages (i.e. khan and spock) so we can log hit counts or something
- - Create a view/template for displaying the metrics of all endpoints (i.e. a table of person and visit count, etc.)
- - Which character do people like the most? (Spock vs. Khanaas vs. Kirk)
+### Intro to Django's Database ORM
+Django has a very easy to use ORM for interfacing with the database.  Let's use Django's ORM to manage our pages and background images.
+
+- Create a database table for managing name and image URL for a page:
+  - Add the following to `api/models.py`:
+      ```python
+      class Character(models.Model):
+      name = models.CharField(max_length=50)
+      hits = models.IntegerField(default=0, editable=False) # TODO we should add this in a later exercise
+      img_url = models.CharField(max_length=100)
+
+      def __unicode__(self):
+          return self.name
+      ```
+  - Create a definition for the database changes, called a '[migration](https://docs.djangoproject.com/en/1.8/topics/migrations/)':
+
+      ```shell
+      vagrant ssh -c './manage.py makemigrations api'
+      ```
+
+  - Apply the migration on the database:
+
+      ```shell
+      vagrant ssh -c './manage.py migrate'
+      ```
+      - If you login to the database, you'll notice there is an api_character table:
+          - Login to the dbshell: `vagrant ssh -c './manage.py dbshell'`
+          - In the psql prompt, run `\dt` to list the tables, notice `api_character` is listed
+
+  - You'll notice that the Character table is NOT listed in http://localhost:8000/admin
+    - Add the following code to 'api/admin.py' to activate our Character model in the Django admin console:
+      ```python
+      admin.site.register(Character)
+      ```
+    - Reload the admin page, and note that 'Character' is now available for viewing and editing
+      - Create a 'kirk' character, and set the 'img_url' to 'http://khanaas.com/images/kirk.jpg'
+
+- Replace `kirk_view()` in 'api/views.py' with a more generic implementation:
+    ```python
+    def get_character_view(request, input_character, input_phrase):
+    # Get the character by 'name', if it exists (case insensitive)
+    # If a match is not found, return a 404 page
+    character_obj = get_object_or_404(Character, name__iexact=input_character)
+
+    last_char = input_phrase[-1]
+    context = {
+        # Tweak the input phrase by repeating the last character
+        'phrase' : input_phrase + (last_char * 5),
+        'img_url': character_obj.img_url
+    }
+    return render(request, 'khanaas.html', context)
+     ```
+- Lastly, let's adjust the URL path in 'api/urls.py' to reflect the new function and its **two** arguments:
+
+    ```python
+    url(r'^(?P<input_character>[\w]+)/(?P<input_phrase>[\w]+)$', 'get_character_view'),
+    ```
+- The kirk URL should work the same as it did before, test it out: http://localhost:8000/kirk/yourphrasehere
+- Once you get kirk working, using the Django admin console to add a page for Spock (http://localhost:8000/spock/yourphrasehere)
+  - Image URL for Spock: http://khanaas.com/images/spock.jpg
