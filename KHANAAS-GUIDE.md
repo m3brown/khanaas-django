@@ -12,6 +12,7 @@
 
 ### Configure the Django App
 - Create `./khanaas/local_settings.py` and paste the following database settings: 
+
 ```python
 DATABASES = {
     'default': {
@@ -22,19 +23,26 @@ DATABASES = {
     }
 }
 ```
+
 - Place the following at the bottom of khanaas/settings.py
+
 ```python
 from khanaas.local_settings import *
 ```
+
 - Initialize the Django database tables
+
 ```shell
 vagrant ssh -c './manage.py migrate'
 ```
+
 - Create a superuser account for yourself
+
 ```shell
 # You will be prompted for a username, email, and password
 vagrant ssh -c './manage.py createsuperuser'
 ```
+
 - Check out the database via postgresql shell
   - Activate the shell with `vagrant ssh -c './manage.py dbshell'`
     - `manage.py dbshell` is effectively shorthand for `psql -U khan -d khanaas`
@@ -60,6 +68,7 @@ vagrant ssh -c './manage.py createsuperuser'
        ```python
        url(r'^', include('api.urls', namespace='api')),
        ```
+
  - Create a 'hello world' view by adding the following to `api/views.py`:
 
     ```python
@@ -67,6 +76,7 @@ vagrant ssh -c './manage.py createsuperuser'
     def hello_world_view(request):
        return HttpResponse("Hello, world, this is khan aas")
     ```
+
  - Create a url path to the new view by creating `api/urls.py` with the following content:
 
     ```python
@@ -76,6 +86,7 @@ vagrant ssh -c './manage.py createsuperuser'
                            url(r'^hello$', 'hello_world_view'),
                           )
     ```
+
  - View the page at http://localhost:8000/hello
 
 #### Create simple API views
@@ -94,7 +105,8 @@ Create an html template, view and url that display a phrase on the page
       </body>
     </html>
     ```
-    * NOTE: Django combines the templates directories from all apps into one namespace.  As a result, it's considered good practice to create an `<appname>` directory inside your templates directory to ensure there is not a naming conflict with templates in another Django app.
+
+    * NOTE: Django combines the templates directories from all apps into one namespace.  As a result, it is considered good practice to create an `<appname>` directory inside your templates directory to ensure there is not a naming conflict with templates in another Django app.
            
  - Add the following code to `api/views.py` to render the template in the previous step:
 
@@ -117,6 +129,7 @@ Create an html template, view and url that display a phrase on the page
     ```
     url(r'^kirk/(?P<input_phrase>[\w]+)$', 'kirk_view'),
     ```
+
     - kirk_view is the name of the function to call in views.py
     - <input_phrase> is the name of the parameter passed to the kirk_view function
     - [\w]+ is regex for input_phrase, requiring that the value be one or more 'word' (i.e. alphanumeric) characters
@@ -126,11 +139,12 @@ Create an html template, view and url that display a phrase on the page
 ### IDEA investigate if we can have some customizable django admin field for modifying the input text
  - i.e. mike -> mikeeee or miiikkkeee based on some regex in a django-admin text field
 
-### Intro to Django's Database ORM
-Django has a very easy to use ORM for interfacing with the database.  Let's use Django's ORM to manage our pages and background images.
+### Intro to the Django Database ORM
+Django has a very easy to use ORM for interfacing with the database.  In this activity, we will use the Django ORM to manage our pages and background images.
 
 - Create a database table for managing name and image URL for a page:
   - Add the following to `api/models.py`:
+
       ```python
       class Character(models.Model):
       name = models.CharField(max_length=50)
@@ -140,6 +154,7 @@ Django has a very easy to use ORM for interfacing with the database.  Let's use 
       def __unicode__(self):
           return self.name
       ```
+
   - Create a definition for the database changes, called a '[migration](https://docs.djangoproject.com/en/1.8/topics/migrations/)':
 
       ```shell
@@ -151,19 +166,23 @@ Django has a very easy to use ORM for interfacing with the database.  Let's use 
       ```shell
       vagrant ssh -c './manage.py migrate'
       ```
-      - If you login to the database, you'll notice there is an api_character table:
+
+      - If you login to the database, you will see there is an api_character table:
           - Login to the dbshell: `vagrant ssh -c './manage.py dbshell'`
           - In the psql prompt, run `\dt` to list the tables, notice `api_character` is listed
 
-  - You'll notice that the Character table is NOT listed in http://localhost:8000/admin
+  - Even though the table was created in the database, the Character table is NOT listed in http://localhost:8000/admin
     - Add the following code to 'api/admin.py' to activate our Character model in the Django admin console:
+
       ```python
       admin.site.register(Character)
       ```
+
     - Reload the admin page, and note that 'Character' is now available for viewing and editing
       - Create a 'kirk' character, and set the 'img_url' to 'http://khanaas.com/images/kirk.jpg'
 
-- Replace `kirk_view()` in 'api/views.py' with a more generic implementation:
+- Add a generic implementation of kirk_view() to 'api/views.py':
+
     ```python
     def get_character_view(request, input_character, input_phrase):
     # Get the character by 'name', if it exists (case insensitive)
@@ -177,12 +196,14 @@ Django has a very easy to use ORM for interfacing with the database.  Let's use 
         'img_url': character_obj.img_url
     }
     return render(request, 'khanaas.html', context)
-     ```
-- Lastly, let's adjust the URL path in 'api/urls.py' to reflect the new function and its **two** arguments:
+    ```
+
+- Lastly, adjust the URL path in 'api/urls.py' to point to `get_character_view()` instead of `kirk_view()`:
 
     ```python
     url(r'^(?P<input_character>[\w]+)/(?P<input_phrase>[\w]+)$', 'get_character_view'),
     ```
+
 - The kirk URL should work the same as it did before, test it out: http://localhost:8000/kirk/yourphrasehere
 - Once you get kirk working, using the Django admin console to add a page for Spock (http://localhost:8000/spock/yourphrasehere)
   - Image URL for Spock: http://khanaas.com/images/spock.jpg
