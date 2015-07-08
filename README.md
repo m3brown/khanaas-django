@@ -1,5 +1,7 @@
 # KHAN as a service, in Django
 
+This is an introductory tutorial for learning core Django concepts.  You will be replicating the functionality of www.khanaas.com, plus additional features to showcase Django strengths such as the ORM and Forms.
+
   - **Technology stack**: 
    - Python 2.7
    - Django 1.8
