@@ -19,7 +19,8 @@ This is an introductory tutorial for learning core Django concepts.  You will be
  - Modify the Vagrantfile in this repo so that `config.vm.box = "khanaas-django"`
 1. Run `vagrant up` to create the virtual machine
  - If you don't use khanaas-django.box from the previous step, this step will also download Django, PostgreSQL, and other requirements
-1. Follow the [guide](KHANAAS-GUIDE.md) for creating your own Khan AAS app
+
+Coming Soon: A guide for creating your own Khan AAS app
 
 ### Command Line Access
 Once provisioning completes, connect to the machine using `vagrant ssh`
