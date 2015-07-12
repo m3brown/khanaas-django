@@ -17,8 +17,9 @@ This is an introductory tutorial for learning core Django concepts.  You will be
 ## Windows Dependencies
 - Windows users may need to install SSH software to get Vagrant working
   - Cygwin should work fine with Vagrant
-  - Another easy way to enable SSH is to download [Git](http://git-scm.com/download/win)
-    - At the the `Adjusting your PATH environment` screen of the installer, check the `Use Git from the Windows Command Prompt` option
+  - Another easy way to enable SSH is to download [Git](http://git-scm.com/download/win) and:
+    1. Use the Git Bash terminal to use vagrant
+    2. Manually set the PATH in cmd.exe before running vagrant: `set PATH=%PATH%;C:\Program Files (x86)\Git\bin`
 
 ## Installation
 1. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
