@@ -5,12 +5,19 @@ This is an introductory tutorial for learning core Django concepts.  You will be
   - **Technology stack**: 
    - Python 2.7
    - Django 1.8
-   - Postgres
+   - Postgres 9.3
 
 ## Dependencies
 - **Vagrant / Virtualbox** - creates the VM used for development
   - Vagrant download links can be found [here](http://www.vagrantup.com/downloads)
-  - Virtualbox download links can be found [here](https://www.virtualbox.org/wiki/Downloads)
+  - Virtualbox download links can be found [here](https://www.virtualbox.org/wiki/Download_Old_Builds_4_3)
+    - We had issues getting the recently released Virtualbox 5.0 working with the Ubuntu virtual image used in this workshop.
+    - The link above is for the 4.3 version of Virtualbox, which is still being maintained.
+  
+## Windows Dependencies
+- Windows users may need to install SSH software to get Vagrant working
+  - Cygwin and Git Shell (via [Github for Windows](https://windows.github.com/)) should work fine with Vagrant
+  - For Cmd or PowerShell you will likely need to do something like [this](http://stackoverflow.com/a/16247703)
 
 ## Installation
 1. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
