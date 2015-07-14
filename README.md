@@ -7,6 +7,8 @@ This is an introductory tutorial for learning core Django concepts.  You will be
    - Django 1.8
    - Postgres 9.3
 
+**NOTE**: Installing the dependencies and the khanaas-django virtual environment will consume about 1GB of bandwidth.
+
 ## Dependencies
 - **Vagrant / Virtualbox** - creates the VM used for development
   - Vagrant download links can be found [here](http://www.vagrantup.com/downloads)
@@ -25,6 +27,7 @@ This is an introductory tutorial for learning core Django concepts.  You will be
 1. Clone this repository `git clone https://github.com/m3brown/khanaas-django.git`
 1. Open a terminal/Powershell instance and navigate to the `khanaas-django` directory you just created
 1. Run `vagrant up` to create the virtual machine
+ - NOTE: This requires about 700MB of bandwidth
  - This will load a lightweight Ubuntu Linux virtual machine with no GUI.  We will interact with it via command line actions.
  - If you don't use khanaas-django.box from the previous step, this step will also download Django, PostgreSQL, and other requirements
  - Windows users, if you get prompted with a firewall warning, make sure you allow 'private network' access
